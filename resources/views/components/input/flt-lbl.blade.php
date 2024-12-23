@@ -1,6 +1,6 @@
 @props(['name'=>'', 'label'=>'لیبل', 'readonly'=>'', 'text_size'=>''])
 <div class="relative mb-4">
-    <input id="{{$name}}" wire:model.blur="{{$name}}" {{$attributes}} {{$readonly}} placeholder=" " autocomplete="off"
+    <input id="{{$name}}" wire:model="{{$name}}" {{$attributes}} {{$readonly}} placeholder=" " autocomplete="off"
            class="block w-full rounded-md pt-3 pb-3 text-center border border-gray-400 bg-transparent {{$text_size}}
                    focus:outline-none focus:ring-1 focus:text-blue-800 text-slate-600 peer">
     <label for="{{$name}}"
