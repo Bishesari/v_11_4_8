@@ -1,0 +1,25 @@
+@font-face {
+    font-family: Noora_FD_VF;
+    src: url('Noora-FD-VF[DSTY\,wght].woff2');
+}
+html{
+    direction: rtl;
+}
+body{
+    font-family: Noora_FD_VF, serif;
+}
+
+.err_show{
+    animation-name: err_show;
+    animation-duration: 200ms;
+}
+@keyframes err_show {
+    from{
+        transform: translate(0, -20px);
+        opacity: 0;
+    }
+    to{
+        transform: translate(0,0);
+        opacity: 1;
+    }
+}
