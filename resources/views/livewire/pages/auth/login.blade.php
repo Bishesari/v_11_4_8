@@ -32,7 +32,7 @@ new #[Layout('layouts.logreg')] class extends Component
     <h1 class="text-center font-semibold my-2">{{__('فرم ورود')}}</h1>
 
     <!-- Form Body -->
-    <div class="border py-7 px-6 rounded-md">
+    <div class="border py-8 px-6 rounded-md">
         <form wire:submit="login">
             <!-- User Name -->
             <x-input.flt-lbl name="form.user_name" label="نام کاربری:" style="direction: ltr" autofocus  maxlength="20"/>
