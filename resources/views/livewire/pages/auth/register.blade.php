@@ -1,28 +1,27 @@
 <?php
 
+use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Volt\Component;
 
-new #[Layout('layouts.temp')] class extends Component
-{
-    public string $name = '';
-    public string $email = '';
+new #[Layout('layouts.logreg')] #[Title('ثبت نام')] class extends Component {
+
+    public string $n_code = '';
+    public string $mobile = '';
     public string $password = '';
     public string $password_confirmation = '';
 
-    /**
-     * Handle an incoming registration request.
-     */
     public function register(): void
     {
         $validated = $this->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'n_code' => ['required', 'digits:10', new Ncode(), 'unique:' . Profile::class . ',n_code'],
+            'mobile' => ['required', 'starts_with:09', 'digits:11'],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -33,80 +32,41 @@ new #[Layout('layouts.temp')] class extends Component
     }
 }; ?>
 
-<div class="w-96 mx-auto">
-    <form wire:submit="register">
-        <div class="relative mb-5">
-            <input type="text" id="floating_outlined" class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1
-             border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0
-             focus:border-blue-600 peer" placeholder=" " />
+<div class="sm:w-96 w-80">
 
-            <label for="floating_outlined" class="absolute text-sm text-gray-500 duration-300 transform
-             -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2
-              peer-focus:text-blue-600
-              peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2
-              peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4
-              rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Floating outlined</label>
-        </div>
+    <!-- Form Title -->
+    <h1 class="text-center font-semibold my-2">{{__('ثبت نام')}}</h1>
+    <!-- Form Body -->
+    <div class="border py-8 px-6 rounded-md">
+        <form wire:submit="register">
+            <!-- National Code -->
+            <x-input.flt-lbl name="n_code" label="کدملی:" style="direction: ltr" autofocus maxlength="10"/>
+            <!-- Mobile Number -->
+            <x-input.flt-lbl name="mobile" label="شماره موبایل:" style="direction: ltr" maxlength="11"/>
+            <!-- Password -->
+            <x-input.flt-lbl name="password" type="password" label="کلمه عبور:" style="direction: ltr" maxlength="20"/>
+            <x-input.flt-lbl name="password_confirmation" type="password" label="تکرار کلمه عبور:"
+                             style="direction: ltr" maxlength="20"/>
 
-        <div class="relative">
-            <input type="text" id="n_code" name="n_code" placeholder=" "
-                   class="block w-full rounded-md pt-3 pb-3 text-center border border-gray-400 bg-white
-                   focus:outline-none focus:ring-1 focus:text-blue-800 text-gray-600 peer">
-            <label for="n_code"
-                   class="absolute text-sm text-gray-500 transform duration-200 right-3
-                   peer-placeholder-shown:-translate-y-[36px] peer-placeholder-shown:bg-transparent peer-placeholder-shown:p-0
-                   peer-focus:-translate-y-[61px] peer-focus:px-2 peer-focus:bg-white peer-focus:text-blue-700
-                   -translate-y-[61px] px-2 bg-white">
-                {{__('کدملی:')}}
-            </label>
-        </div>
+            <div class="flex justify-between mt-5">
+                <a href="{{route('login')}}" wire:navigate tabindex="-1" class="text-sm px-2 pt-2.5 text-blue-600
+                hover:bg-gray-100 rounded-md">{{__('قبلا ثبت نام کرده اید؟')}}</a>
 
-        <!-- Name -->
-
-        <div class="mt-6">
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input wire:model="name" id="name" class="block mt-1 w-full" type="text" name="name" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
-        </div>
-
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
-
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input wire:model="password" id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-text-input wire:model="password_confirmation" id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}" wire:navigate>
-                {{ __('Already registered?') }}
-            </a>
-
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
-    </form>
+                <button wire:click="login" class="border border-green-700 px-3.5 pt-[5px] pb-1.5 text-sm text-green-700 h-9 w-20
+                   hover:text-white hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 rounded
+                   transition duration-200">
+                    <span wire:loading.remove>{{__('ثبت نام')}}</span>
+                    <span wire:loading class="animate-spin">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                             class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+                            <path
+                                d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9"/>
+                            <path fill-rule="evenodd"
+                                  d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z"/>
+                        </svg>
+                    </span>
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
