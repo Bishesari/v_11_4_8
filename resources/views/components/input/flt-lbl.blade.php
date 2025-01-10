@@ -1,8 +1,8 @@
-@props(['name'=>'', 'label'=>'لیبل', 'readonly'=>'', 'text_size'=>''])
+@props(['name'=>'', 'label'=>'لیبل', 'readonly'=>'', 'text_size'=>'', 'dir'=>''])
 <div class="relative mb-4">
     <input id="{{$name}}" wire:model="{{$name}}" {{$attributes}} {{$readonly}} placeholder=" " autocomplete="off"
            class="block w-full rounded-md pt-3 pb-3 text-center border border-gray-400 bg-transparent {{$text_size}}
-                   focus:outline-none focus:ring-1 focus:text-blue-800 text-slate-600 peer">
+                   focus:outline-none focus:ring-1 focus:text-blue-800 text-slate-600 peer {{$dir}}">
     <label for="{{$name}}"
            class="absolute text-sm text-slate-500 transform duration-200 -right-2 -translate-y-[61px] px-2 bg-white
 

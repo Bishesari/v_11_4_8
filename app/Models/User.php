@@ -9,8 +9,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
-    use HasRoles;
+    use HasFactory, Notifiable, HasRoles;
     public $timestamps = false;
     protected $fillable = ['user_name', 'password', 'created'];
     protected $hidden = ['password', 'remember_token'];
